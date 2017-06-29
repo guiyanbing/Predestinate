@@ -153,7 +153,8 @@ public class VideoAudioChatHelper {
      * @param isInvate   是否来自邀请他按钮，只有女号有。布局和出场方式 singleType 不同
      */
     public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag, int singleType, String channel_uid, boolean isInvate) {
-        if (flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0) == 0) {
+        boolean isMan = ModuleMgr.getCenterMgr().getMyInfo().isMan();  // 女号不弹框
+        if (isMan && flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0) == 0) {
             UIShow.showLookAtHerDlg(context, dstUid, channel_uid, isInvate);
             return;
         }
