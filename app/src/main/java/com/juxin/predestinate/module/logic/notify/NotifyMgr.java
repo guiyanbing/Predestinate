@@ -90,7 +90,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
         JSONObject jsonObject = JsonUtil.getJsonObject(message.getJsonStr());
         int type = jsonObject.optInt("mtp");
         if (type != NOTIFY_COMMON && type != NOTIFY_GIFT
-                && type != NOTIFY_VIDEO && type != NOTIFY_UPDATE && type != NOTIFY_INVITEVIDEO) return;
+                && type != NOTIFY_UPDATE && type != NOTIFY_INVITEVIDEO) return;
 
         show(message, getContent(type, jsonObject));
     }
