@@ -64,7 +64,7 @@ public class VideoAudioChatHelper {
     private boolean isDownloading = false;
     private int singleType;
     private static boolean isGroupInvite = false;  // 用户是否处于群发状态
-    private static long inviteId = 0 ;
+    private static long inviteId = 0;
 
     private VideoAudioChatHelper() {
     }
@@ -136,7 +136,7 @@ public class VideoAudioChatHelper {
     }
 
     /**
-     *  处于群发要请时获取inviteId
+     * 处于群发要请时获取inviteId
      */
     public long getInviteId() {
         return inviteId;
@@ -164,7 +164,7 @@ public class VideoAudioChatHelper {
     /**
      * 邀请对方音频或视频聊天
      *
-     * @param inviteId 邀请id,即为邀请流水号，接受邀请并发起视频的时候使用
+     * @param inviteId  邀请id,即为邀请流水号，接受邀请并发起视频的时候使用
      * @param selectVal 是否露脸
      */
     public void acceptInviteVAChat(final long inviteId, int selectVal) {
@@ -359,7 +359,8 @@ public class VideoAudioChatHelper {
     public void downloadVideoPlugin(final Context context) {
         if (!downloadPluginFragment.isAdded())
             downloadPluginFragment.show((FragmentActivity) context);
-        if (isDownloading) return;
+        if (isDownloading)
+            return;
 
         isDownloading = true;
         HttpMgr httpMgr = new HttpMgrImpl();
@@ -415,7 +416,6 @@ public class VideoAudioChatHelper {
         //特殊错误码: 3001 用户正在视频聊天中 3002 该用户无法视频聊天 3003 钻石余额不足
         JSONObject jo = response.getResponseJson();
         if (response.isOk()) {
-            ChatMediaPlayer.getInstance().stopPlayVoice();
             JSONObject resJo = jo.optJSONObject("res");
             final long vcID = resJo.optLong("vc_id");
             addvcID(vcID);
@@ -470,6 +470,17 @@ public class VideoAudioChatHelper {
         return bundle;
     }
 
+    public void stopPlayVoice() {
+        if (ChatMediaPlayer.getInstance().isPlaying()) {
+            MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ChatMediaPlayer.getInstance().stopPlayVoice();
+                }
+            });
+        }
+    }
+
     /**
      * 调起视频插件： 普通
      */
@@ -480,6 +491,7 @@ public class VideoAudioChatHelper {
                 intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcInitActivity");
                 intent.putExtras(bundle);
                 context.startActivity(intent);
+                stopPlayVoice();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -499,6 +511,7 @@ public class VideoAudioChatHelper {
                 intent.putExtras(bundle);
                 context.startActivity(intent);
                 setGroupInviteStatus(true);
+                stopPlayVoice();
             } catch (Exception e) {
                 e.printStackTrace();
             }

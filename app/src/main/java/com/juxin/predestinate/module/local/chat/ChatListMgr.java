@@ -27,7 +27,6 @@ import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
-import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -528,13 +527,11 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 sendGroupAcceptMsg(videoMessage);
                 return;
             }
-            ChatMediaPlayer.getInstance().stopPlayVoice();
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
                     videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp(), 0);
         } else {
             boolean isInvite = PSP.getInstance().getBoolean("ISINVITE", false);
             if (isInvite && videoMessage.getVideoTp() == 2) {
-                ChatMediaPlayer.getInstance().stopPlayVoice();
                 CountDownTimerUtil.getInstance().addHandledIds(VideoAudioChatHelper.getInstance().getInviteId());
                 VideoAudioChatHelper.getInstance().openInvitedDirect((Activity) App.getActivity(),
                         videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp(), videoMessage.getVc_channel_key());
