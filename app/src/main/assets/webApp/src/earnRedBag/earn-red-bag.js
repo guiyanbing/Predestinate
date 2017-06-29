@@ -21,14 +21,8 @@ var EarnRedBag = function () {
       document.getElementById('voiceItem').innerHTML = resp.res.audio_quncount + '人';
     });
     window.platform.getUserSelfDetail(function (data) {
-      var uid = data.uid;
-      window.platform.safeRequestNoUrl("Post", web.urlType.Go, web.urlMethod.GetVideoChatConfig, {}, {uid: uid}, function (resp) {
-        if (resp.status !== 'ok') {
-          return;
-        }
-        document.getElementById('videoPrice').innerHTML = resp.res.videoprice + '钻石/分钟';
-        document.getElementById('voicePrice').innerHTML = resp.res.audioprice + '钻石/分钟';
-      })
+      document.getElementById('videoPrice').innerHTML = data.videoPrice + '钻石/分钟';
+      document.getElementById('voicePrice').innerHTML = data.voicePrice + '钻石/分钟';
     });
 
   };

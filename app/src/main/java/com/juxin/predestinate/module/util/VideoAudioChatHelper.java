@@ -18,6 +18,7 @@ import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
+import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -63,7 +64,7 @@ public class VideoAudioChatHelper {
     private boolean isDownloading = false;
     private int singleType;
     private static boolean isGroupInvite = false;  // 用户是否处于群发状态
-    private static long inviteId = 0 ;
+    private static long inviteId = 0;
 
     private VideoAudioChatHelper() {
     }
@@ -135,7 +136,7 @@ public class VideoAudioChatHelper {
     }
 
     /**
-     *  处于群发要请时获取inviteId
+     * 处于群发要请时获取inviteId
      */
     public long getInviteId() {
         return inviteId;
@@ -163,7 +164,7 @@ public class VideoAudioChatHelper {
     /**
      * 邀请对方音频或视频聊天
      *
-     * @param inviteId 邀请id,即为邀请流水号，接受邀请并发起视频的时候使用
+     * @param inviteId  邀请id,即为邀请流水号，接受邀请并发起视频的时候使用
      * @param selectVal 是否露脸
      */
     public void acceptInviteVAChat(final long inviteId, int selectVal) {
@@ -311,6 +312,7 @@ public class VideoAudioChatHelper {
      * @param chatType 1视频，2音频
      */
     public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType, long price) {
+        singleType = 2;   // 男默认关闭摄像头
         Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
         bundle.putInt("vc_chat_from", 1);
         bundle.putLong("vc_girl_price", price);
@@ -358,7 +360,8 @@ public class VideoAudioChatHelper {
     public void downloadVideoPlugin(final Context context) {
         if (!downloadPluginFragment.isAdded())
             downloadPluginFragment.show((FragmentActivity) context);
-        if (isDownloading) return;
+        if (isDownloading)
+            return;
 
         isDownloading = true;
         HttpMgr httpMgr = new HttpMgrImpl();
@@ -468,6 +471,17 @@ public class VideoAudioChatHelper {
         return bundle;
     }
 
+    public void stopPlayVoice() {
+        if (ChatMediaPlayer.getInstance().isPlaying()) {
+            MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ChatMediaPlayer.getInstance().stopPlayVoice();
+                }
+            });
+        }
+    }
+
     /**
      * 调起视频插件： 普通
      */
@@ -478,6 +492,7 @@ public class VideoAudioChatHelper {
                 intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcInitActivity");
                 intent.putExtras(bundle);
                 context.startActivity(intent);
+                stopPlayVoice();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -497,6 +512,7 @@ public class VideoAudioChatHelper {
                 intent.putExtras(bundle);
                 context.startActivity(intent);
                 setGroupInviteStatus(true);
+                stopPlayVoice();
             } catch (Exception e) {
                 e.printStackTrace();
             }

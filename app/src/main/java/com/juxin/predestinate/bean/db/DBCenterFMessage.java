@@ -231,17 +231,17 @@ public class DBCenterFMessage {
         });
     }
 
-    public void updateDeliveryStatus(long msgID, DBCallback callback) {
-        updateStatus(msgID, MessageConstant.DELIVERY_STATUS, callback);
-    }
-
-    public void updateStatus(final long msgID, final int status, final DBCallback callback) {
+    public void updateDeliveryStatus(final long msgID, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 ContentValues values = new ContentValues();
-                values.put(FMessage.COLUMN_STATUS, status);
-                long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
+                values.put(FMessage.COLUMN_STATUS, MessageConstant.DELIVERY_STATUS);
+
+                String sql = FMessage.COLUMN_MSGID + " = ? AND (" + FMessage.COLUMN_STATUS + " = ? OR " + FMessage.COLUMN_STATUS + " = ?)";
+
+                long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql,
+                        String.valueOf(msgID), String.valueOf(MessageConstant.OK_STATUS), String.valueOf(MessageConstant.SENDING_STATUS));
                 DBCenter.makeDBCallback(callback, (ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR));
             }
         });

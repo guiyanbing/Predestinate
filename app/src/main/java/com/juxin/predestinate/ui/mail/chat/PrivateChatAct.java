@@ -130,6 +130,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 if (yCoinBean.isOk()) {
                     ModuleMgr.getCenterMgr().getMyInfo().setYcoin(yCoinBean.getY());
                     ModuleMgr.getCenterMgr().getMyInfo().setyCoinUserid(yCoinBean.getTouid());
+                    if(privateChat != null && MailSpecialID.customerService.getSpecialID() != whisperID) {
+                        privateChat.yTipsLogic(false);
+                    }
                     checkIsCanSendMsg();
                 }
             }
@@ -288,7 +291,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         });
 
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {
-            privateChat.yTipsLogic(true, false);
+            privateChat.yTipsLogic(false);
             initFollow();
             isShowTopPhone();
         }
@@ -383,7 +386,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 } else {//不请求网络
                     checkIsCanSendMsg();
                     if(privateChat != null && MailSpecialID.customerService.getSpecialID() != whisperID) {
-                        privateChat.yTipsLogic(true, false);
+                        privateChat.yTipsLogic(false);
                     }
                 }
                 break;

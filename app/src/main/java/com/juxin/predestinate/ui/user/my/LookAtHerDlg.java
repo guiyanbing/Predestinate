@@ -34,7 +34,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     private boolean isInvate = false;
     private boolean isAcceptInvitat = false;
     private CheckBox cb_own_agree, cb_own_disagree, cb_def_sel;
-    private  long inviteId;
+    private long inviteId;
 
     public LookAtHerDlg() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
@@ -56,7 +56,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         this.isInvate = isInvate;
     }
 
-    public void setAcceptInvitat(boolean isAcceptInvitat,long inviteId) {
+    public void setAcceptInvitat(boolean isAcceptInvitat, long inviteId) {
         this.isAcceptInvitat = isAcceptInvitat;
         this.inviteId = inviteId;
     }
@@ -87,9 +87,9 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         rl_own_disagree.setOnClickListener(this);
         tv_select_ok.setOnClickListener(this);
 
-        cb_own_agree.setChecked(true);
+        cb_own_disagree.setChecked(true);
 
-        if(!isMan && isInvate) {//女号--邀请他
+        if (!isMan && isInvate) {//女号--邀请他
             VideoVerifyBean bean = ModuleMgr.getCommonMgr().getVideoVerify();
             tv_title.setText(getString(R.string.invitation_he_type));
             rl_own_agree.setVisibility(View.GONE);
@@ -98,11 +98,11 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
             cb_own_disagree.setVisibility(View.GONE);
             ll_def_select.setVisibility(View.GONE);
 
-            if(bean.getBooleanVideochat()) {
+            if (bean.getBooleanVideochat()) {
                 tv_first.setText(getString(R.string.invitation_he_video));
                 rl_own_agree.setVisibility(View.VISIBLE);
             }
-            if(bean.getBooleanAudiochat()) {
+            if (bean.getBooleanAudiochat()) {
                 tv_second.setText(getString(R.string.invitation_he_audio));
                 rl_own_disagree.setVisibility(View.VISIBLE);
             }
@@ -114,39 +114,39 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_own_agree:
-                if(!isInvate) {// 男、女 来自非邀请他按钮
+                if (!isInvate) {// 男、女 来自非邀请他按钮
                     cb_own_agree.setChecked(true);
                     cb_own_disagree.setChecked(false);
-                }else {// 女性--邀请他(邀请视频)
-                    VideoAudioChatHelper.getInstance().girlSingleInvite((Activity)context,otherId,VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                } else {// 女性--邀请他(邀请视频)
+                    VideoAudioChatHelper.getInstance().girlSingleInvite((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                 }
 
                 break;
             case R.id.rl_own_disagree:
-                if(!isInvate) {// 男、女 来自非邀请他按钮
+                if (!isInvate) {// 男、女 来自非邀请他按钮
                     cb_own_agree.setChecked(false);
                     cb_own_disagree.setChecked(true);
-                }else {// 女性--邀请他(邀请语音)
-                    VideoAudioChatHelper.getInstance().girlSingleInvite((Activity)context,otherId,VideoAudioChatHelper.TYPE_AUDIO_CHAT);
+                } else {// 女性--邀请他(邀请语音)
+                    VideoAudioChatHelper.getInstance().girlSingleInvite((Activity) context, otherId, VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                 }
                 break;
             case R.id.tv_select_ok:
-                if(!isInvate) {// 男、女 来自非邀请他按钮
-                    if (cb_own_agree.isChecked()) {
+                if (!isInvate) {// 男号：看看她
+                    if (cb_own_agree.isChecked()) {   // 露脸
                         selectVal = Constant.APPEAR_TYPE_OWN;
                         if (cb_def_sel.isChecked()) {
                             saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_OWN);
                         }
-                    } else if (cb_own_disagree.isChecked()) {
+                    } else if (cb_own_disagree.isChecked()) {  // 不露脸
                         selectVal = Constant.APPEAR_TYPE_NO_OWN;
                         if (cb_def_sel.isChecked()) {
                             saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_NO_OWN);
                         }
                     }
-                    if (!isAcceptInvitat){
+                    if (!isAcceptInvitat) {   //  普通邀请
                         VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
                                 false, selectVal, channel_uid, false);
-                    }else {
+                    } else {   //  群邀：立即接听
                         VideoAudioChatHelper.getInstance().acceptInviteVAChat(inviteId, selectVal);
                     }
                 }

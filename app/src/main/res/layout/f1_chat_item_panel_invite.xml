@@ -93,8 +93,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+                android:paddingLeft="15dp">
 
                 <ImageView
                     android:layout_width="@dimen/px46_dp"
@@ -123,7 +122,6 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:paddingLeft="15dp"
                 android:paddingRight="15dp">
 
                 <ImageView
