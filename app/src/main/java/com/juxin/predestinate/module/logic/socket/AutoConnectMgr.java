@@ -498,11 +498,13 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
                 long msgId = contentObject.optLong("d", -1);//消息id
                 long sender = contentObject.optLong("fid", -1);//发送者id
 
-                //消息接收反馈
-                if (data.getMsgType() >= TCPConstant.MSG_ID_SERVER_PUSH_START_INDEX
-                        && data.getMsgType() < TCPConstant.MSG_ID_SERVER_PUSH_END_INDEX) {
-                    socket.sendPacket(getLoopbackData(TCPConstant.MSG_ID_PUSH_MESSAGE, msgId));
-                }
+//DELETE START 170629 解决App主进程被终止，Service做了消息回执导致主进程丢消息，也收不到离线
+//                //消息接收反馈
+//                if (data.getMsgType() >= TCPConstant.MSG_ID_SERVER_PUSH_START_INDEX
+//                        && data.getMsgType() < TCPConstant.MSG_ID_SERVER_PUSH_END_INDEX) {
+//                    socket.sendPacket(getLoopbackData(TCPConstant.MSG_ID_PUSH_MESSAGE, msgId));
+//                }
+//DELETE END 170629
 
                 //抛出消息
                 onMessage(data, msgId);
