@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -43,14 +44,18 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.BaseUtil;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -313,6 +318,7 @@ public class ChatMgr implements ModuleBase {
                                         updateOk(giftMessage, null);
                                     } else {
                                         updateFail(giftMessage, null);
+                                        showToast(response.getMsg());
                                     }
                                 }
                             });
@@ -524,9 +530,20 @@ public class ChatMgr implements ModuleBase {
                                 ModuleMgr.getCenterMgr().getMyInfo().setDiamand(stone);
                         } else {
                             updateFail(giftMessage, null);
+                            showToast(response.getMsg());
                         }
                     }
                 });
+            }
+        });
+    }
+
+    //tost提示
+    private void showToast(final String tip) {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                PToast.showShort(tip + "");
             }
         });
     }
@@ -666,11 +683,11 @@ public class ChatMgr implements ModuleBase {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         if (!( //以下条件满足一个就不锁定聊天框
                 (userDetail.isUnlock_ycoin() && userDetail.isUnlock_vip())                      //解锁VIP和Y币
-                || (userDetail.isMan() && userDetail.getYcoin() > 79 && !userDetail.isVip())    //男非VIP，Y币大于79
-                || (userDetail.isMan() && userDetail.getYcoin() > 0 && userDetail.isVip())      //男VIP，Y币大于0
-                || (userDetail.isMan() && userDetail.isUnlock_ycoin() && !userDetail.isUnlock_vip() && userDetail.isVip()//解锁Y币不解锁VIP，男VIP
-                || (userDetail.isMan() && !userDetail.isUnlock_ycoin() && userDetail.isUnlock_vip() && userDetail.getYcoin() > 0))//不解锁Y币解锁VIP，男Y币大于0
-        )){
+                        || (userDetail.isMan() && userDetail.getYcoin() > 79 && !userDetail.isVip())    //男非VIP，Y币大于79
+                        || (userDetail.isMan() && userDetail.getYcoin() > 0 && userDetail.isVip())      //男VIP，Y币大于0
+                        || (userDetail.isMan() && userDetail.isUnlock_ycoin() && !userDetail.isUnlock_vip() && userDetail.isVip()//解锁Y币不解锁VIP，男VIP
+                        || (userDetail.isMan() && !userDetail.isUnlock_ycoin() && userDetail.isUnlock_vip() && userDetail.getYcoin() > 0))//不解锁Y币解锁VIP，男Y币大于0
+        )) {
             ModuleMgr.getChatListMgr().setTodayChatShow();
             Msg msg = new Msg();
             msg.setData(false);

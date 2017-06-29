@@ -104,7 +104,7 @@ public class WebPanel extends BasePanel {
                         getContext().startActivity(intent);
                     }
                 } else {
-                    loadUrl();
+                    webView.loadUrl(url);//此处必须使用shouldOverrideUrlLoading回调里的两个参数
                 }
                 return true;
             }
@@ -146,7 +146,7 @@ public class WebPanel extends BasePanel {
         loadUrl();
     }
 
-    private void loadUrl(){
+    private void loadUrl() {
         // 判断有无网络
         if (!NetUtil.getInstance().isNetConnect(getContext())) {
             customFrameLayout.showOfIndex(FRAME_ERROR);
