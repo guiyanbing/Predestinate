@@ -76,7 +76,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
     private final int NOTIFY_GIFT = BaseMessage.BaseMessageType.gift.getMsgType();        //礼物消息:10
     private final int NOTIFY_VIDEO = BaseMessage.BaseMessageType.video.getMsgType();      //音视频消息:24
     private final int NOTIFY_UPDATE = BaseMessage.BaseMessageType.autoUpdateHtml.getMsgType();//自动升级提示
-    private final int NOTIFY_INVITEVIDEO = BaseMessage.BaseMessageType.inviteVideoMass.getMsgType();//自动升级提示
+    private final int NOTIFY_INVITEVIDEO = BaseMessage.BaseMessageType.inviteVideoMass.getMsgType();//女性对男性的语音（视频）邀请
 
     /**
      * 进行聊天消息通知
@@ -111,7 +111,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
         }
 
         if(type == NOTIFY_INVITEVIDEO){
-            if(jsonObject.optInt("media_tp") ==1){
+            if(jsonObject.optInt("media_tp") == 1){
                 return App.context.getString(R.string.notify_invite_video);
             }else {
                 return App.context.getString(R.string.notify_invite_voice);

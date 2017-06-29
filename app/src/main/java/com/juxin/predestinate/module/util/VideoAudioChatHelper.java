@@ -18,6 +18,7 @@ import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
+import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -359,7 +360,8 @@ public class VideoAudioChatHelper {
     public void downloadVideoPlugin(final Context context) {
         if (!downloadPluginFragment.isAdded())
             downloadPluginFragment.show((FragmentActivity) context);
-        if (isDownloading) return;
+        if (isDownloading)
+            return;
 
         isDownloading = true;
         HttpMgr httpMgr = new HttpMgrImpl();
@@ -469,6 +471,17 @@ public class VideoAudioChatHelper {
         return bundle;
     }
 
+    public void stopPlayVoice() {
+        if (ChatMediaPlayer.getInstance().isPlaying()) {
+            MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ChatMediaPlayer.getInstance().stopPlayVoice();
+                }
+            });
+        }
+    }
+
     /**
      * 调起视频插件： 普通
      */
@@ -479,6 +492,7 @@ public class VideoAudioChatHelper {
                 intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcInitActivity");
                 intent.putExtras(bundle);
                 context.startActivity(intent);
+                stopPlayVoice();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -498,6 +512,7 @@ public class VideoAudioChatHelper {
                 intent.putExtras(bundle);
                 context.startActivity(intent);
                 setGroupInviteStatus(true);
+                stopPlayVoice();
             } catch (Exception e) {
                 e.printStackTrace();
             }

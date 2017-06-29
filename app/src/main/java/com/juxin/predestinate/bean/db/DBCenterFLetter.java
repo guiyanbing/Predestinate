@@ -455,8 +455,10 @@ public class DBCenterFLetter {
                 ContentValues values = new ContentValues();
                 values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.DELIVERY_STATUS));
                 long ret = mDatabase.update(FLetter.FLETTER_TABLE, values,
-                        FLetter.COLUMN_MSGID + " = ? AND " + FLetter.COLUMN_TYPE + " != ?",
-                        String.valueOf(msgID), String.valueOf(BaseMessage.video_MsgType));
+                        FLetter.COLUMN_MSGID + " = ? AND " + FLetter.COLUMN_TYPE + " != ? AND ("
+                                + FMessage.COLUMN_STATUS + " = ? OR " + FMessage.COLUMN_STATUS + " = ?)",
+                        String.valueOf(msgID), String.valueOf(BaseMessage.video_MsgType),
+                        String.valueOf(MessageConstant.OK_STATUS), String.valueOf(MessageConstant.SENDING_STATUS));
 
                 DBCenter.makeDBCallback(callback, (ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR));
             }
