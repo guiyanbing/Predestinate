@@ -158,12 +158,12 @@ public class SmilePackage extends BaseData {
     public void parseJsonSmileItem(String s)throws JSONException {
         JSONObject json = getJsonObject(s);
         JSONObject jsonObject = json.optJSONObject("res");
+        if(items == null){
+            items = new ArrayList<>();
+        }else {
+            items.clear();
+        }
         if (!jsonObject.isNull("list")) {
-            if(items == null){
-                items = new ArrayList<>();
-            }else {
-                items.clear();
-            }
             JSONArray jsonArray = jsonObject.optJSONArray("list");
             if (null != jsonArray) {
                 for (int i = 0; i < jsonArray.length(); i++) {
