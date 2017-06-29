@@ -127,9 +127,15 @@ public class UserCheckInfoFootPanel extends BasePanel {
      * 刷新聊天价格
      */
     public void refreshChatPrice(VideoConfig config) {
-        if (config == null || !config.isVerifyVideo()) return;
+        if (config == null) return;
 
-        chatLayout.setVisibility(config.isVerifyVideo() ? View.VISIBLE : View.GONE);
+        chatLayout.setVisibility((config.isVideoChat() || config.isVoiceChat()) ? View.VISIBLE : View.GONE);
+        LinearLayout videoLayout = (LinearLayout) findViewById(R.id.layout_video);
+        videoLayout.setVisibility(config.isVideoChat() ? View.VISIBLE : View.GONE);
+        LinearLayout voiceLayout = (LinearLayout) findViewById(R.id.layout_voice);
+        voiceLayout.setVisibility(config.isVoiceChat() ? View.VISIBLE : View.GONE);
+        findViewById(R.id.layout_spacer).setVisibility((config.isVideoChat() && config.isVoiceChat()) ? View.VISIBLE : View.GONE);
+
         tv_video_price.setText(getContext().getString(R.string.user_info_chat_video, config.getVideoPrice()));
         tv_audio_price.setText(getContext().getString(R.string.user_info_chat_voice, config.getAudioPrice()));
         iv_auth_video.setVisibility(config.isVerifyVideo() ? View.VISIBLE : View.GONE);
@@ -138,7 +144,7 @@ public class UserCheckInfoFootPanel extends BasePanel {
     /**
      * 刷新私密视频状态
      */
-    public void freshSecretVideo(){
+    public void freshSecretVideo() {
         videoPanel.refresh(userDetail);
     }
 }
