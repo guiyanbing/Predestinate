@@ -12,11 +12,11 @@ import android.os.RemoteException;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.TypeConvertUtil;
-import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -384,6 +384,13 @@ public class IMProxy {
         @Override
         public void onMessage(final NetData data) throws RemoteException {
             final long msgId = data.getMessageId();
+
+            //消息接收反馈
+            if (data.getMsgType() >= TCPConstant.MSG_ID_SERVER_PUSH_START_INDEX
+                    && data.getMsgType() < TCPConstant.MSG_ID_SERVER_PUSH_END_INDEX) {
+                iCoreService.sendMsg(getLoopbackData(TCPConstant.MSG_ID_PUSH_MESSAGE, msgId));
+            }
+
             //检查是否有发送回调
             if (msgId != -1) {
                 final SendCallBack callBack = mSendCallBackMap.remove(msgId);
@@ -585,5 +592,17 @@ public class IMProxy {
                     break;
             }
         }
+    }
+
+    /**
+     * @param msgType 消息类型：从消息头中获取
+     * @param msgId   消息id：从消息头中获取
+     * @return 回送消息体结构
+     */
+    private NetData getLoopbackData(int msgType, long msgId) {
+        Map<String, Object> loopbackMap = new HashMap<>();
+        loopbackMap.put("s", 0);
+        loopbackMap.put("d", msgId);
+        return new NetData(App.uid, msgType, JSON.toJSONString(loopbackMap));
     }
 }
