@@ -63,7 +63,7 @@ public class VideoAudioChatHelper {
     private boolean isDownloading = false;
     private int singleType;
     private static boolean isGroupInvite = false;  // 用户是否处于群发状态
-    private static long inviteId = 0 ;
+    private static long inviteId = 0;
 
     private VideoAudioChatHelper() {
     }
@@ -135,7 +135,7 @@ public class VideoAudioChatHelper {
     }
 
     /**
-     *  处于群发要请时获取inviteId
+     * 处于群发要请时获取inviteId
      */
     public long getInviteId() {
         return inviteId;
@@ -163,7 +163,7 @@ public class VideoAudioChatHelper {
     /**
      * 邀请对方音频或视频聊天
      *
-     * @param inviteId 邀请id,即为邀请流水号，接受邀请并发起视频的时候使用
+     * @param inviteId  邀请id,即为邀请流水号，接受邀请并发起视频的时候使用
      * @param selectVal 是否露脸
      */
     public void acceptInviteVAChat(final long inviteId, int selectVal) {
@@ -311,6 +311,7 @@ public class VideoAudioChatHelper {
      * @param chatType 1视频，2音频
      */
     public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType, long price) {
+        singleType = 2;   // 男默认关闭摄像头
         Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
         bundle.putInt("vc_chat_from", 1);
         bundle.putLong("vc_girl_price", price);
