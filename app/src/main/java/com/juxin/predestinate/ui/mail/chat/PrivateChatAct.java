@@ -152,6 +152,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 chatInfo.parseJson(response.getResponseString());
                 //Y币
                 ModuleMgr.getCenterMgr().getMyInfo().setYcoin(chatInfo.getYcoin());
+                ModuleMgr.getCenterMgr().getMyInfo().setDiamondsSum(chatInfo.getDiamond());
 
                 //在线状态
                 if("在线".equalsIgnoreCase(chatInfo.getOtherInfo().getLast_online())) {
@@ -414,5 +415,12 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             }
         }
         lastActivity = this;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reqChatInfo();
+        executeYCoinTask();
     }
 }

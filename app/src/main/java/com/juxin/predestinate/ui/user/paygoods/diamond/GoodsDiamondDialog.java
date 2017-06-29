@@ -111,6 +111,7 @@ public class GoodsDiamondDialog extends BaseActivity implements View.OnClickList
                             payGoods.getCommodityList().get(goodsPanel.getPosition()).getNum(),
                             payGoods.getCommodityList().get(goodsPanel.getPosition()).getDoublePrice());
                 }
+                finish();
                 break;
         }
     }
