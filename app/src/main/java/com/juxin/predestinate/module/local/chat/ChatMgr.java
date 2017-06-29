@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -44,18 +43,14 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.BaseUtil;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -142,7 +137,7 @@ public class ChatMgr implements ModuleBase {
      */
     public void updateOtherRead(String channelID, String whisperID, long sendID, SystemMessage message) {
         ModuleMgr.getChatListMgr().updateToReadPrivate(Long.valueOf(whisperID));
-        ModuleMgr.getChatMgr().updateOtherSideRead(null, message.getFid() + "", message.getTid() + "");
+        ModuleMgr.getChatMgr().updateOtherSideRead(null, message.getWhisperID(), message.getSSendID());
     }
 
     /**
@@ -518,7 +513,9 @@ public class ChatMgr implements ModuleBase {
                         SendGiftResultInfo info = new SendGiftResultInfo();
                         info.parseJson(response.getResponseString());
                         if (response.isOk()) {
-                            updateOk(giftMessage, null);
+                            MessageRet messageRet = new MessageRet();
+                            messageRet.setMsgId(info.getMsgID());
+                            updateOk(giftMessage, messageRet);
                             GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftID);
                             if (giftInfo == null)
                                 return;
@@ -701,7 +698,7 @@ public class ChatMgr implements ModuleBase {
     private void updateOk(final BaseMessage message, MessageRet messageRet) {
         if (messageRet != null && messageRet.getMsgId() > 0) {
             message.setMsgID(messageRet.getMsgId());
-            message.setTime(messageRet.getTm());
+            message.setTime(messageRet.getTm() <= 0 ? getTime() : messageRet.getTm());
         } else {
             message.setMsgID(MessageConstant.NumNo);
             message.setTime(getTime());
