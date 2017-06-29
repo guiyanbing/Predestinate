@@ -36,8 +36,8 @@
 
                 <ImageView
                     android:id="@+id/input_look_at_her"
-                    android:layout_width="@dimen/px135_dp"
-                    android:layout_height="@dimen/px135_dp"
+                    android:layout_width="@dimen/px120_dp"
+                    android:layout_height="@dimen/px120_dp"
                     android:layout_above="@+id/input_giftview"
                     android:layout_alignRight="@+id/chat_content_list"
                     android:layout_marginBottom="@dimen/px35_dp"
@@ -46,8 +46,8 @@
 
                 <ImageView
                     android:id="@+id/input_giftview"
-                    android:layout_width="@dimen/px135_dp"
-                    android:layout_height="@dimen/px135_dp"
+                    android:layout_width="@dimen/px120_dp"
+                    android:layout_height="@dimen/px120_dp"
                     android:layout_alignBottom="@+id/chat_content_list"
                     android:layout_alignRight="@+id/chat_content_list"
                     android:layout_marginBottom="@dimen/px45_dp"
