@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.juxin.library.log.PSP;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
@@ -17,6 +18,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.CountDownTimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
@@ -86,7 +88,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
             imgPic.setBackgroundResource(R.drawable.p1_ltlx02);
         }
         if (util.isTimingTask(id) && !util.isHandled(id)) {
-            TimeMgr.getInstance().attach(this,id);
+            TimeMgr.getInstance().attach(this, id);
             isHandled = false;
         }
         if (util.isTimingTask(id) && !util.isHandled(id)) {
@@ -136,7 +138,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                     insertHitTips(desc);
                 }
             }
-        }else if (MsgType.MT_Time_Change.equalsIgnoreCase(key) && util.isHandled(id) && !isHandled){
+        } else if (MsgType.MT_Time_Change.equalsIgnoreCase(key) && util.isHandled(id) && !isHandled) {
             isHandled = true;
             tvTime.setText(getContext().getString(R.string.lost_efficacy));
             llReject.setVisibility(View.GONE);
@@ -166,10 +168,11 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                 if (util.isTimingTask(id) && !util.isHandled(id)) {
                     //接通逻辑
                     if (isHasDiamond()) {
-                        if (type == 1) {
+                        int show = PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0);
+                        if (type == 1 && show == 0) {
                             UIShow.showLookAtHerDlg(App.activity, whisperID, channelUid, inviteId);
                         } else {
-                            VideoAudioChatHelper.getInstance().acceptInviteVAChat(inviteId, 1);
+                            VideoAudioChatHelper.getInstance().acceptInviteVAChat(inviteId, show);
                         }
                     }
                     break;
