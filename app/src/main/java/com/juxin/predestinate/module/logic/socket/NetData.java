@@ -106,8 +106,7 @@ public class NetData implements Parcelable {
         }
     }
 
-    public NetData(int length, long uid, int msgType, String content){
-        super();
+    private NetData(int length, long uid, int msgType, String content){
         this.length = length;
         this.uid = uid;
         this.msgType = msgType;
@@ -272,6 +271,32 @@ public class NetData implements Parcelable {
         }
 
         return messageId;
+    }
+
+    /**
+     * 重置或添加消息Id，仅对已加密过得数据体使用
+     * 如：已使用以下构造方法后使用
+     * public NetData(long uid, int msgType, String content)
+     * @param msgId
+     */
+    public void setMessageId(long msgId){
+        if(msgId == -1 || TextUtils.isEmpty(content)) return;
+        try {
+            String decryptContent = new String(JniUtil.GetDecryptString(content));
+            JSONObject contentJ = new JSONObject(decryptContent);
+            contentJ.put("d",msgId);
+            content = contentJ.toString();
+
+            this.content = JniUtil.GetEncryptString(content);
+            this.messageId = msgId;
+            try {
+                this.length = this.content.getBytes("UTF-8").length;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                this.length = 0;
+            }
+        } catch (JSONException e) {
+        }
     }
 
     /**

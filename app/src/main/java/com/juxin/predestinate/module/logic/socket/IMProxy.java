@@ -180,12 +180,27 @@ public class IMProxy {
      * @param callBack 发送消息回调
      */
     public void send(NetData netData, SendCallBack callBack) {
+        send(netData,-1,callBack);
+    }
+
+    /**
+     * socket发消息
+     *
+     * @param netData  数据包封装
+     * @param msgId   消息Id,此Id为非0时会覆盖 @NetData 中content的d值
+     * @param callBack 发送消息回调
+     */
+    public void send(NetData netData, long msgId, SendCallBack callBack) {
         if (callBack == null) {
             send(netData);
             return;
         }
+        if(msgId == -1) {
+            msgId = netData.getMessageId();
+        }else{
+            netData.setMessageId(msgId);
+        }
 
-        long msgId = netData.getMessageId();
         if (msgId != -1) {
             mSendCallBackMap.put(msgId, callBack);
         }
