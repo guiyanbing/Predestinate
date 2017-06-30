@@ -315,7 +315,9 @@ public class ChatMgr implements ModuleBase {
                                     SendGiftResultInfo info = new SendGiftResultInfo();
                                     info.parseJson(response.getResponseString());
                                     if (response.isOk()) {
-                                        updateOk(giftMessage, null);
+                                        MessageRet messageRet = new MessageRet();
+                                        messageRet.setMsgId(info.getMsgID());
+                                        updateOk(giftMessage, messageRet);
                                     } else {
                                         updateFail(giftMessage, null);
                                         showToast(response.getMsg());
