@@ -236,6 +236,12 @@ public class ChatMgr implements ModuleBase {
                     String localVoiceUrl = commonMessage.getLocalVoiceUrl();
                     String img = commonMessage.getImg();
                     String localImg = commonMessage.getLocalImg();
+
+                    if(commonMessage.getMsgID() <= 0){
+                        commonMessage.setMsgID(commonMessage.getcMsgID());
+                    }
+                    commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+
                     if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
 
                         if (!TextUtils.isEmpty(voiceUrl) && FileUtil.isURL(voiceUrl)) {
