@@ -241,6 +241,12 @@ public class ChatMgr implements ModuleBase {
                     String localVoiceUrl = commonMessage.getLocalVoiceUrl();
                     String img = commonMessage.getImg();
                     String localImg = commonMessage.getLocalImg();
+
+                    if(commonMessage.getMsgID() <= 0){
+                        commonMessage.setMsgID(commonMessage.getcMsgID());
+                    }
+                    commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+
                     if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
 
                         if (!TextUtils.isEmpty(voiceUrl) && FileUtil.isURL(voiceUrl)) {
@@ -315,7 +321,9 @@ public class ChatMgr implements ModuleBase {
                                     SendGiftResultInfo info = new SendGiftResultInfo();
                                     info.parseJson(response.getResponseString());
                                     if (response.isOk()) {
-                                        updateOk(giftMessage, null);
+                                        MessageRet messageRet = new MessageRet();
+                                        messageRet.setMsgId(info.getMsgID());
+                                        updateOk(giftMessage, messageRet);
                                     } else {
                                         updateFail(giftMessage, null);
                                         showToast(response.getMsg());
