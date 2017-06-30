@@ -72,7 +72,7 @@ public class DiamondSendGiftDlg extends Dialog implements RequestComplete, GiftH
         giftPic = giftBean.getPic();
         giftDiamonds = giftBean.getMoney();
         tv_gift_diamonds.setText(giftDiamonds + mContext.getString(R.string.a_diamond));
-        ImageLoader.loadAvatar(mContext, giftPic, iv_pic);
+        ImageLoader.loadFitCenter(mContext, giftPic, iv_pic);
     }
 
     private void giftNotFind() {
