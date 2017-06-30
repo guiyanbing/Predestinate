@@ -1,6 +1,5 @@
 package com.juxin.predestinate.module.local.statistics;
 
-import android.app.Activity;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -132,14 +131,16 @@ public class Statistics {
      */
     public static void startUp() {
         Map<String, Object> singleMap = new HashMap<>();
+        long uid = ModuleMgr.getCenterMgr().getMyInfo().getUid();
         singleMap.put("time", ModuleMgr.getAppMgr().getSecondTime());//发送时间戳
-        singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
+        singleMap.put("uid", uid);//用户UID,未注册用户或新设备时返回0
         singleMap.put("gender", ModuleMgr.getCenterMgr().getMyInfo().getGender());//用户性别
         singleMap.put("client_type", Constant.PLATFORM_TYPE);//客户端类型
         singleMap.put("version", String.valueOf(Constant.SUB_VERSION));//客户端标记号
         singleMap.put("build_ver", ModuleMgr.getAppMgr().getVerCode());//客户端打包版本号
-        singleMap.put("channel_id", ModuleMgr.getCenterMgr().getMyInfo().getChannel_uid() + "_"
-                + ModuleMgr.getCenterMgr().getMyInfo().getChannel_sid());//渠道编号<主渠道>_<子渠道>
+        //渠道编号<主渠道>_<子渠道>,当uid=0时,取APP包内的渠道号
+        singleMap.put("channel_id", uid == 0 ? (ModuleMgr.getAppMgr().getMainChannelID() + "_" + ModuleMgr.getAppMgr().getSubChannelID())
+                : (ModuleMgr.getCenterMgr().getMyInfo().getChannel_uid() + "_" + ModuleMgr.getCenterMgr().getMyInfo().getChannel_sid()));
         singleMap.put("package_name", ModuleMgr.getAppMgr().getPackageName());//客户端包名
         singleMap.put("sign_name", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));//客户端签名
         singleMap.put("device_id", ModuleMgr.getAppMgr().getDeviceID());//设备标识符,获取失败返回空字符串
@@ -254,16 +255,18 @@ public class Statistics {
         if (TextUtils.isEmpty(sendPoint)) return;
 
         Map<String, Object> singleMap = new HashMap<>();
+        long uid = ModuleMgr.getCenterMgr().getMyInfo().getUid();
         singleMap.put("time", ModuleMgr.getAppMgr().getSecondTime());//发送时间戳
-        singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
+        singleMap.put("uid", uid);//用户UID,未注册用户或新设备时返回0
         singleMap.put("to_uid", to_uid);//与谁交互UID(可选)
 
         singleMap.put("gender", ModuleMgr.getCenterMgr().getMyInfo().getGender());//用户性别
         singleMap.put("client_type", Constant.PLATFORM_TYPE);//客户端类型
         singleMap.put("version", String.valueOf(Constant.SUB_VERSION));//客户端标记号
         singleMap.put("build_ver", ModuleMgr.getAppMgr().getVerCode());//客户端打包版本号
-        singleMap.put("channel_id", ModuleMgr.getCenterMgr().getMyInfo().getChannel_uid() + "_"
-                + ModuleMgr.getCenterMgr().getMyInfo().getChannel_sid());//渠道编号<主渠道>_<子渠道>
+        //渠道编号<主渠道>_<子渠道>,当uid=0时,取APP包内的渠道号
+        singleMap.put("channel_id", uid == 0 ? (ModuleMgr.getAppMgr().getMainChannelID() + "_" + ModuleMgr.getAppMgr().getSubChannelID())
+                : (ModuleMgr.getCenterMgr().getMyInfo().getChannel_uid() + "_" + ModuleMgr.getCenterMgr().getMyInfo().getChannel_sid()));
         singleMap.put("package_name", ModuleMgr.getAppMgr().getPackageName());//客户端包名
         singleMap.put("sign_name", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));//客户端签名
         singleMap.put("device_id", ModuleMgr.getAppMgr().getDeviceID());//设备标识符,获取失败返回空字符串
