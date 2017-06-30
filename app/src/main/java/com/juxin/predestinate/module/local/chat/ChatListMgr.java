@@ -520,7 +520,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private void setVideoMsg(BaseMessage message) {
         if (message == null) return;
         LoadingDialog.closeLoadingDialog();
-        VideoMessage videoMessage = (VideoMessage) message;
+        final VideoMessage videoMessage = (VideoMessage) message;
         if (videoMessage.getVideoTp() == 1) {
             // 女性用户且处于群发状态, 直接打开聊天界面
             if (!ModuleMgr.getCenterMgr().getMyInfo().isMan() && VideoAudioChatHelper.getInstance().getGroupInviteStatus()) {
@@ -539,7 +539,19 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 return;
             }
 
-            UIShow.sendBroadcast(App.getActivity(), videoMessage.getVideoTp(), videoMessage.getVc_channel_key());
+            if (videoMessage.getVideoTp() != 2) {
+                UIShow.sendBroadcast(App.getActivity(), videoMessage.getVideoTp(), videoMessage.getVc_channel_key());
+                return;
+
+            }
+
+            // 同意接受消息延迟发送广播
+            MsgMgr.getInstance().delay(new Runnable() {
+                @Override
+                public void run() {
+                    UIShow.sendBroadcast(App.getActivity(), videoMessage.getVideoTp(), videoMessage.getVc_channel_key());
+                }
+            }, 1000);
         }
     }
 
