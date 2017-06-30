@@ -21,6 +21,7 @@ import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 
@@ -139,11 +140,24 @@ public class ChatPanelGift extends ChatPanel {
     }
 
     @Override
-    public boolean onClickErrorResend(BaseMessage msgData) {
+    public boolean onClickErrorResend(final BaseMessage msgData) {
         if (msgData == null || !(msgData instanceof GiftMessage)) {
             return false;
         }
-        setDialog(msgData, null);
+        setDialog(msgData, new SimpleTipDialog.ConfirmListener() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onSubmit() {
+                if (getChatInstance() != null && getChatInstance().chatContentAdapter != null){
+                    msgData.setStatus(MessageConstant.SENDING_STATUS);
+                    getChatInstance().chatContentAdapter.notifyDataSetChanged();
+                }
+            }
+        });
         return true;
     }
 }
