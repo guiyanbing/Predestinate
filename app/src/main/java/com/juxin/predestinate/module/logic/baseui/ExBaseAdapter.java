@@ -30,6 +30,7 @@ public abstract class ExBaseAdapter<T> extends BaseAdapter {
 
     public void setListNonotify(List<T> datas) {
         this.datas = datas;
+        notifyDataSetChanged();
     }
 
     public List<T> getList() {

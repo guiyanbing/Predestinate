@@ -17,6 +17,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:background="@color/color_F6EDEF">
 
             <ImageView
@@ -34,7 +35,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/to_bind"
                 android:layout_toRightOf="@+id/item_icon"
+                android:maxLines="2"
+                android:padding="@dimen/px10_dp"
                 android:text="@string/user_fragment_no_verify_phone"
                 android:textColor="@color/color_FC828A"
                 android:textSize="@dimen/px39_sp" />
@@ -48,6 +52,7 @@
                 android:paddingTop="@dimen/px5_dp" />
 
             <TextView
+                android:id="@+id/to_bind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

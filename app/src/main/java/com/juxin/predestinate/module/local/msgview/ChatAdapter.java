@@ -426,6 +426,19 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                         chatInstance.chatContentAdapter.setList(listTemp);
                         moveToBottom();
                         checkUnHandledMess(listTemp);
+
+                        if (listTemp.size() <= 0){  //更新已读
+                            return;
+                        }
+                        BaseMessage message = listTemp.get(listTemp.size()-1);
+                        if (message != null && !message.isSender() && !TextUtils.isEmpty(message.getWhisperID())){
+                            ModuleMgr.getChatListMgr().updateToReadPrivate(message.getLWhisperID());
+                            ModuleMgr.getChatMgr().updateOtherSideRead(null, message.getWhisperID(), message.getSSendID());
+                            handReadMsg();
+                            chatInstance.chatContentAdapter.setList(listTemp);
+                            moveToBottom();
+                        }
+
                         if (isMachine) onDataUpdate();
                     }
                 });
