@@ -140,9 +140,9 @@ public class ChatMgr implements ModuleBase {
      * @param whisperID
      * @param sendID
      */
-    public void updateOtherRead(String channelID, String whisperID, long sendID, SystemMessage message) {
+    public void updateOtherRead(String channelID, String whisperID, long sendID, BaseMessage message) {
         ModuleMgr.getChatListMgr().updateToReadPrivate(Long.valueOf(whisperID));
-        ModuleMgr.getChatMgr().updateOtherSideRead(null, message.getWhisperID(), message.getSSendID());
+        ModuleMgr.getChatMgr().updateOtherSideRead(null, whisperID, Long.toString(sendID));
     }
 
     /**

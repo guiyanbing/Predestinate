@@ -642,7 +642,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         mess.parseJson(message.getJsonStr());
         switch (mess.getXtType()) {
             case 3:
-                ModuleMgr.getChatMgr().updateOtherRead(null, mess.getFid() + "", mess.getTid(), mess);
+                ModuleMgr.getChatMgr().updateOtherRead(null, mess.getFid() + "", mess.getTid(), message);
                 break;
         }
     }
