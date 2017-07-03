@@ -360,8 +360,8 @@ public class ImageLoader {
 
     private static <T> DrawableRequestBuilder<T> getDrawableBuilder(Context context, T model) {
         return getRequest(context, model)
-                .crossFade()
-//                .dontAnimate()
+//                .crossFade()
+                .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE);
     }
 
