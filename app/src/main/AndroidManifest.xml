@@ -77,6 +77,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.user.check.UserCheckInfoAct"
+            android:windowSoftInputMode="adjustPan|stateHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.check.other.UserBlockAct"
