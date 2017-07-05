@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 
@@ -42,6 +43,10 @@ public class PluginReceiver extends BroadcastReceiver {
 
                         case 8: // 重置主包群发状态
                             VideoAudioChatHelper.getInstance().setGroupInviteStatus(false);
+                            break;
+                        case 1000://通知主包插件是否在前台
+                            boolean plugInForeground = jo.optBoolean("foreground",false);
+                            App.setPluginForeground(plugInForeground);
                             break;
                         default:
                             break;

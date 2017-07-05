@@ -32,6 +32,11 @@ public class App extends MultiDexApplication {
      */
     public static boolean isLogin = false;
 
+    /**
+     * 插件是否在前台
+     */
+    public static volatile boolean isPluginForeground = false;
+
     private static PActivityLifecycleCallbacks lifecycleCallbacks;
     public static long t;
 
@@ -97,7 +102,21 @@ public class App extends MultiDexApplication {
      * @return
      */
     public static boolean isForeground(){
-        return lifecycleCallbacks.isForeground();
+        boolean isMainForeground = lifecycleCallbacks.isForeground();
+        if(!isMainForeground){
+            return isPluginForeground;
+        }else{
+            isPluginForeground = false;
+        }
+        return isMainForeground;
+    }
+
+    /**
+     * 设置插件是否为前台
+     * @param isPluginForeground
+     */
+    public static void setPluginForeground(boolean isPluginForeground){
+        App.isPluginForeground = isPluginForeground;
     }
 
     // -----------------------------------------------------
