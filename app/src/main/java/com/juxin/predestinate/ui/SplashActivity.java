@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.module.local.location.LocationMgr;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -27,9 +28,10 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         initDelay();
+        Statistics.startUp();
     }
 
-    private void initDelay(){
+    private void initDelay() {
         MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {

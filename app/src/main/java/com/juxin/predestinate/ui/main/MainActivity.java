@@ -21,7 +21,6 @@ import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.common.CommonMgr;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
@@ -29,9 +28,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.config.FinalKey;
-import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
-import com.juxin.predestinate.module.logic.model.mgr.AppMgr;
 import com.juxin.predestinate.module.logic.notify.view.CustomFloatingPanel;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -79,7 +76,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void initData() {
         Statistics.activeStatistic();
-        Statistics.startUp();
 
         ModuleMgr.getCommonMgr().requestVideochatConfig(new RequestComplete() {
             @Override
