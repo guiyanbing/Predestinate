@@ -428,7 +428,10 @@
         <receiver android:name=".module.logic.notify.PluginReceiver">
             <intent-filter>
                 <action android:name="com.juxin.action.plugin" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
     </application>
