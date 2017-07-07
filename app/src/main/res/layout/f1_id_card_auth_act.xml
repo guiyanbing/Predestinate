@@ -53,8 +53,6 @@
                     <EditText
                         android:id="@+id/id_card_eit_id_card"
                         style="@style/id_card_eit"
-                        android:inputType="number"
-                        android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ"
                         android:maxLength="18"
                         android:hint="000-000-0000-00-00-0000"/>
                 </LinearLayout>
