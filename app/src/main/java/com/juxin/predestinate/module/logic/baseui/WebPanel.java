@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -18,6 +19,7 @@ import com.juxin.predestinate.module.logic.invoke.WebAppInterface;
 import com.juxin.predestinate.module.util.PerformanceHelper;
 import com.tencent.smtt.export.external.interfaces.SslError;
 import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
+import com.tencent.smtt.sdk.WebBackForwardList;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
@@ -74,7 +76,7 @@ public class WebPanel extends BasePanel {
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setDefaultTextEncodingName("utf-8");
-        webSettings.setAllowFileAccess(false);//设置允许访问文件数据
+        webSettings.setAllowFileAccess(true);//设置允许访问文件数据
         webSettings.setJavaScriptEnabled(true);
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);//不从缓存加载，确保每次进入的时候都是从服务器请求的最新页面
         if (PerformanceHelper.isHighPerformance(getContext())) {
@@ -121,6 +123,12 @@ public class WebPanel extends BasePanel {
             @Override
             public void onPageFinished(WebView webView, String url) {
                 PLogger.d("-----onPageFinished---->" + url);
+                // [单独处理url为空的情况](https://stackoverflow.com/questions/30426017/webview-clicking-on-link-results-in-aboutblank?rq=1)
+                if ("about:blank".equals(url) && webView.getTag() != null) {
+                    webView.loadUrl(webView.getTag().toString());
+                } else {
+                    webView.setTag(url);
+                }
                 if (isLoadingInnerControl && !isLoadError) {
                     hideLoading();
                 }
@@ -173,6 +181,24 @@ public class WebPanel extends BasePanel {
             webView.destroy();
             webView = null;
         }
+    }
+
+    public boolean canGoBack(){
+        WebBackForwardList history = webView.copyBackForwardList();
+        int index = -1;
+        String url = null;
+
+        while (webView.canGoBackOrForward(index)) {
+            if (!history.getItemAtIndex(history.getCurrentIndex() + index).getUrl().equals("about:blank")) {
+                webView.goBackOrForward(index);
+                url = history.getItemAtIndex(-index).getUrl();
+                Log.e("tag","first non empty" + url);
+                break;
+            }
+            index --;
+
+        }
+        return url != null;
     }
 
     /**
