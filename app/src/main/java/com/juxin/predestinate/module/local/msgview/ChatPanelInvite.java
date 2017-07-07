@@ -172,7 +172,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
 
                 if (util.isTimingTask(id) && !util.isHandled(id)) {
                     //接通逻辑
-                    if (isHasDiamond()) {
+                    if (isHasDiamond() && VideoAudioChatHelper.getInstance().pluginIsDownload()) {
                         int show = PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0);
                         if (type == 1 && show == 0) {
                             UIShow.showLookAtHerDlg(App.activity, whisperID, channelUid, inviteId);

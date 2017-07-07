@@ -521,4 +521,15 @@ public class VideoAudioChatHelper {
             downloadVideoPlugin(context);
         }
     }
+
+    /**
+     * 插件下载
+     */
+    public boolean pluginIsDownload() {
+        if (!ApkUnit.getAppIsInstall(App.activity, PACKAGE_PLUGIN_VIDEO) || ApkUnit.getInstallAppVer(App.activity, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
+            downloadVideoPlugin(App.activity);
+            return false;
+        }
+        return true;
+    }
 }
