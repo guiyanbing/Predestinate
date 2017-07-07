@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.user.my;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,6 +10,8 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -22,10 +23,10 @@ import com.juxin.predestinate.module.logic.config.Constant;
  */
 public class CloseBalanceDlg extends BaseDialogFragment implements View.OnClickListener {
 
-    private Context context;
     private CheckBox cb_def_sel;
-    private TextView tv_cancel,tv_sure;
+    private TextView tv_cancel, tv_sure;
     private IsCloseYTips isCloseYTips;
+    private long otherId;//产生交互的uid，大数据统计用
 
     public interface IsCloseYTips {
         void isCloseYTips();
@@ -38,12 +39,15 @@ public class CloseBalanceDlg extends BaseDialogFragment implements View.OnClickL
         setCancelable(false);
     }
 
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
-    public void setIsCloseYTips(IsCloseYTips callBack) {
+    /**
+     * 设置一些需要的参数
+     *
+     * @param callBack 确定关闭浮动提示回调
+     * @param otherId  产生交互的uid，大数据统计用
+     */
+    public void setParams(IsCloseYTips callBack, long otherId) {
         this.isCloseYTips = callBack;
+        this.otherId = otherId;
     }
 
     @Override
@@ -69,9 +73,12 @@ public class CloseBalanceDlg extends BaseDialogFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_cancel:
+                Statistics.userBehavior(SendPoint.page_chatframe_closemoneyprompt_cancel, otherId);
                 dismiss();
                 break;
             case R.id.tv_sure:
+                Statistics.userBehavior(SendPoint.page_chatframe_closemoneyprompt_confirm, otherId);
+
                 PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TIPS_VALUE), cb_def_sel.isChecked());
                 PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TMP_TIPS_VALUE), true);
                 isCloseYTips.isCloseYTips();

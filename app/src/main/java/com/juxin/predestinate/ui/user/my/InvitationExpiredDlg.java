@@ -9,12 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.juxin.library.log.PToast;
-import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.module.local.statistics.SendPoint;
-import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
@@ -68,10 +64,12 @@ public class InvitationExpiredDlg extends BaseDialogFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_call:
-                if(type == 1) {
+                StatisticsMessage.chatInviteTimeoutCall(otherId, price, type);
+
+                if (type == 1) {
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
                             true, Constant.APPEAR_TYPE_NO, channel_uid, false);
-                }else if(type == 2) {
+                } else if (type == 2) {
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_AUDIO_CHAT,
                             channel_uid);
                 }

@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -118,6 +120,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                     cb_own_agree.setChecked(true);
                     cb_own_disagree.setChecked(false);
                 } else {// 女性--邀请他(邀请视频)
+                    Statistics.userBehavior(SendPoint.page_chatframe_inviteta_video, otherId);
                     VideoAudioChatHelper.getInstance().girlSingleInvite((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                 }
 
@@ -127,28 +130,31 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                     cb_own_agree.setChecked(false);
                     cb_own_disagree.setChecked(true);
                 } else {// 女性--邀请他(邀请语音)
+                    Statistics.userBehavior(SendPoint.page_chatframe_inviteta_voice, otherId);
                     VideoAudioChatHelper.getInstance().girlSingleInvite((Activity) context, otherId, VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                 }
                 break;
             case R.id.tv_select_ok:
                 if (!isInvate) {// 男号：看看她
-                    if (cb_own_agree.isChecked()) {   // 露脸
+                    if (cb_own_agree.isChecked()) {// 露脸
                         selectVal = Constant.APPEAR_TYPE_OWN;
                         if (cb_def_sel.isChecked()) {
                             saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_OWN);
                         }
-                    } else if (cb_own_disagree.isChecked()) {  // 不露脸
+                    } else if (cb_own_disagree.isChecked()) {// 不露脸
                         selectVal = Constant.APPEAR_TYPE_NO_OWN;
                         if (cb_def_sel.isChecked()) {
                             saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_NO_OWN);
                         }
                     }
-                    if (!isAcceptInvitat) {   //  普通邀请
+                    if (!isAcceptInvitat) {// 普通邀请
                         VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
                                 false, selectVal, channel_uid, false);
-                    } else {   //  群邀：立即接听
+                    } else {// 群邀：立即接听
                         VideoAudioChatHelper.getInstance().acceptInviteVAChat(inviteId, selectVal);
                     }
+                } else {// 女号：取消邀请
+                    Statistics.userBehavior(SendPoint.page_chatframe_inviteta_cancel, otherId);
                 }
                 dismiss();
                 break;

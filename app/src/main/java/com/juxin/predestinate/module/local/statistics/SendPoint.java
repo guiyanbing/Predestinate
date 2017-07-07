@@ -103,6 +103,9 @@ public enum SendPoint {
     menu_me_setting_clearcache,             // 清除缓存
     menu_me_setting_signout,                // 退出按钮
 
+    // --------------封停弹窗---------------
+    page_stopframe_close,           // 封停弹窗->关闭(普通点击,传递当前用户UID哦!)
+
     // --------------聊天框---------------
     chatframe_tool_btnsend,         // 发送按钮
     chatframe_tool_btnvoice,        // 语音说话按钮
@@ -111,10 +114,20 @@ public enum SendPoint {
     chatframe_tool_prcture,         // 聊天框->工具栏->图片按钮(普通点击)
     chatframe_tool_video,           // 聊天框->工具栏->视频聊天按钮(普通点击)
     chatframe_tool_voice,           // 聊天框->工具栏->语音聊天按钮(普通点击)
-    chatframe_nav_follow,           // 关注TA
-    chatframe_nav_y,                // 查看Y币
-    chatframe_nav_tel,              // 查看手机
-    chatframe_nav_weixin,           // 查看微信
+
+    // --------------聊天框(2.2 消息面板新增消息类型)---------------
+    page_chatframe_msg_invite_rejected,         // 聊天框->消息->音视频邀请->拒绝接收
+    page_chatframe_msg_invite_accept,           // 聊天框->消息->音视频邀请->立即接通
+    page_chatframe_msg_invitetimeout_gocall,    // 聊天框->消息->邀请已过有效时间->立即回拨
+    page_chatframe_inviteta_video,              // 聊天框->邀请TA->邀请视频(普通点击,女用户)
+    page_chatframe_inviteta_voice,              // 聊天框->邀请TA->邀请语音(普通点击,女用户)
+    page_chatframe_inviteta_cancel,             // 聊天框->邀请TA->取消(普通点击,女用户)
+
+    // --------------聊天框(2.2 Y币余额浮动提示)---------------
+    page_chatframe_gopayy,                  // 聊天框->立即购买Y币(传递当前Y币余额)
+    page_chatframe_gopayclose,              // 聊天框->立即购买Y币->'X'关闭符号(普通点击)
+    page_chatframe_closemoneyprompt_cancel, // 聊天框->关闭余额提示->取消(普通点击)
+    page_chatframe_closemoneyprompt_confirm,// 聊天框->关闭余额提示->确认关闭(普通点击)
 
     // --------------聊天框(礼物和充值相关)统计项---------------
     chatframe_tool_gift_pay,                //礼物框充值钻石链接
@@ -166,6 +179,13 @@ public enum SendPoint {
 //    voice_tool_enablevideo,     //视频语音框->工具栏->开启自己摄像头
 //    voice_tool_switch,          //视频语音框->工具栏->切换
 //    voice_tool_send,            //视频语音框->工具栏->发送消息
+
+    // --------------语音/视频邀请等待页（注释内容为插件实现）--------------
+//    page_invitewait_close,          // 语音视频邀请等待页->挂断按钮(传递touid哦!)
+//    page_invitewait_accept,         // 语音视频邀请等待页->接受(男性,传递touid哦!)
+//    page_invitewait_rejected,       // 语音视频邀请等待页->拒绝按钮(男性,传递touid哦!)
+    page_invitewait_gempay_gopay,   // 语音视频邀请等待页->钻石不足充值->立即支付(to_uid等于邀请发起人)
+    page_invitewait_gempay_cancel,  // 语音视频邀请等待页->钻石不足充值->取消(to_uid等于邀请发起人)
 
     // --------------欢迎页---------------
     welcome_login,  //登录按钮

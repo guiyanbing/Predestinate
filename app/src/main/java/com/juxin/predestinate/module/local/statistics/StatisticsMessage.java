@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.statistics;
 
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 
 import java.util.ArrayList;
@@ -182,5 +183,76 @@ public class StatisticsMessage {
                 break;
         }
         return type;
+    }
+
+    // --------------------------缘分吧2.2新增统计--------------------------------
+
+    /**
+     * 聊天框->立即购买Y币(传递当前Y币余额)
+     *
+     * @param to_uid 产生交互的uid
+     */
+    public static void chatFramePayY(long to_uid) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("money_num", ModuleMgr.getCenterMgr().getMyInfo().getYcoin());//当前Y币余额
+        Statistics.userBehavior(SendPoint.page_chatframe_gopayy, to_uid, map);
+    }
+
+    /**
+     * 聊天框->消息->音视频邀请->拒绝接收
+     *
+     * @param to_uid  产生交互的uid
+     * @param gem_num 多少钻石1分钟
+     * @param type    邀请类型：InviteVideoMessage#media_tp，1视频，2语音
+     */
+    public static void chatInviteReject(long to_uid, int gem_num, int type) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("gem_num", gem_num);
+        map.put("type", type == 1 ? 1 : 0);
+        Statistics.userBehavior(SendPoint.page_chatframe_msg_invite_rejected, to_uid, map);
+    }
+
+    /**
+     * 聊天框->消息->音视频邀请->立即接通
+     *
+     * @param to_uid  产生交互的uid
+     * @param gem_num 多少钻石1分钟
+     * @param type    邀请类型：InviteVideoMessage#media_tp，1视频，2语音
+     */
+    public static void chatInviteAccept(long to_uid, int gem_num, int type) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("gem_num", gem_num);
+        map.put("type", type == 1 ? 1 : 0);
+        Statistics.userBehavior(SendPoint.page_chatframe_msg_invite_accept, to_uid, map);
+    }
+
+    /**
+     * 聊天框->消息->邀请已过有效时间->立即回拨
+     *
+     * @param to_uid  产生交互的uid
+     * @param gem_num 多少钻石1分钟
+     * @param type    0语音1视频
+     */
+    public static void chatInviteTimeoutCall(long to_uid, int gem_num, int type) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("gem_num", gem_num);
+        map.put("type", type == 1 ? 1 : 0);
+        Statistics.userBehavior(SendPoint.page_chatframe_msg_invitetimeout_gocall, to_uid, map);
+    }
+
+    /**
+     * 聊天框->消息->邀请已过有效时间->立即回拨
+     *
+     * @param to_uid      产生交互的uid
+     * @param gem_num     钻石余额
+     * @param pay_gem_num 购买钻石数量
+     * @param pay_type    0语音1视频
+     */
+    public static void chatInviteGemPay(long to_uid, int gem_num, int pay_gem_num, int pay_type) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("gem_num", gem_num);
+        map.put("pay_gem_num", pay_gem_num);
+        map.put("pay_type", getPayType(pay_type));
+        Statistics.userBehavior(SendPoint.page_invitewait_gempay_gopay, to_uid, map);
     }
 }

@@ -16,6 +16,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.InviteVideoMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -150,6 +151,8 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
     public void onClick(View view) {
         switch (view.getId()) {
             case ll_invite_reject:
+                StatisticsMessage.chatInviteReject(whisperID, (int) mInviteVideoMessage.getPrice(), type);
+
                 if (util.isTimingTask(id) && !util.isHandled(id)) {
                     util.addHandledIds(id);
                     tvTime.setText(getContext().getString(R.string.lost_efficacy));
@@ -165,6 +168,8 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                 }
                 break;
             case ll_invite_connect:
+                StatisticsMessage.chatInviteAccept(whisperID, (int) mInviteVideoMessage.getPrice(), type);
+
                 if (util.isTimingTask(id) && !util.isHandled(id)) {
                     //接通逻辑
                     if (isHasDiamond()) {

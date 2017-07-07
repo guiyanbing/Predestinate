@@ -20,6 +20,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
@@ -32,6 +33,7 @@ import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.GoodsListPanel;
 import com.juxin.predestinate.ui.user.paygoods.GoodsPayTypePanel;
+import com.juxin.predestinate.ui.user.paygoods.bean.PayGood;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 
 import org.json.JSONException;
@@ -223,8 +225,10 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_recharge:  // 充值
-                UIShow.showPayAlipayt(getActivity(), payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType(),
-                        0, "");
+                PayGood payGood = payGoods.getCommodityList().get(goodsPanel.getPosition());
+                StatisticsMessage.chatInviteGemPay(otherID, ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum(),
+                        payGood.getNum(), payTypePanel.getPayType());
+                UIShow.showPayAlipayt(getActivity(), payGood.getId(), payTypePanel.getPayType(), 0, "");
                 break;
 
             case R.id.btn_cancel:

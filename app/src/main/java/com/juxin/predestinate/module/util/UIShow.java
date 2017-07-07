@@ -1091,7 +1091,7 @@ public class UIShow {
         LookAtHerDlg dialog = new LookAtHerDlg();
         dialog.setContext(context);
         dialog.setOtherId(otherId, channel_uid);
-        dialog.setAcceptInvitat(true,inviteId);
+        dialog.setAcceptInvitat(true, inviteId);
         dialog.showDialog((FragmentActivity) context);
     }
 
@@ -1106,11 +1106,13 @@ public class UIShow {
 
     /**
      * 关闭余额提示
+     *
+     * @param callBack 确定关闭浮动提示回调
+     * @param otherId  产生交互的uid，大数据统计用
      */
-    public static void showYTipsCloseDlg(final Context context, CloseBalanceDlg.IsCloseYTips callBack) {
+    public static void showYTipsCloseDlg(final Context context, CloseBalanceDlg.IsCloseYTips callBack, long otherId) {
         CloseBalanceDlg dialog = new CloseBalanceDlg();
-        dialog.setContext(context);
-        dialog.setIsCloseYTips(callBack);
+        dialog.setParams(callBack, otherId);
         dialog.showDialog((FragmentActivity) context);
     }
 
@@ -1349,16 +1351,16 @@ public class UIShow {
     /**
      * 聊天钻石充值弹框
      *
-     * @param otherID  女用户头像
-     * @param chatType 视频，语音邀请
-     * @param price    通信价格
-     * @param isAloneInvite      是否是单邀
-     * @param videoID            vc_id
+     * @param otherID       女用户头像
+     * @param chatType      视频，语音邀请
+     * @param price         通信价格
+     * @param isAloneInvite 是否是单邀
+     * @param videoID       vc_id
      */
-    public static void showBottomChatDiamondDlg(Context context, long otherID, int chatType, int price,boolean isAloneInvite, long videoID) {
+    public static void showBottomChatDiamondDlg(Context context, long otherID, int chatType, int price, boolean isAloneInvite, long videoID) {
         if (chatDialog == null) chatDialog = new BottomChatDiamondDlg();
 
-        chatDialog.setInfo(otherID, chatType, price,isAloneInvite,videoID);
+        chatDialog.setInfo(otherID, chatType, price, isAloneInvite, videoID);
         chatDialog.showDialog((FragmentActivity) context);
     }
 

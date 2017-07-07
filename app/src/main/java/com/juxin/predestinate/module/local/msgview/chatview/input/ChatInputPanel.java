@@ -190,14 +190,14 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                     UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
                     boolean isVip = userDetail.isVip();
                     int yCoin = userDetail.getYcoin();
-                    if(isVip || userDetail.isUnlock_vip()){     //判断是否为VIP，或者不需要VIP，则必定为Y币不足
+                    if (isVip || userDetail.isUnlock_vip()) {     //判断是否为VIP，或者不需要VIP，则必定为Y币不足
                         UIShow.showGoodsYCoinDlgOld(getContext(), otherID, channel_uid);
-                    }else{//在不是VIP的情况下
-                        if(
+                    } else {//在不是VIP的情况下
+                        if (
                                 (otherID != TypeConvertUtil.toLong(userDetail.getyCoinUserid()) && yCoin > 79)//如果非Y币绑定用户且还有可聊天用Y币，则需要充值VIP
-                                ){
+                                ) {
                             UIShow.showGoodsVipDlgOld(getContext(), 1, otherID, channel_uid);
-                        }else{//其他情况均为充值Y币
+                        } else {//其他情况均为充值Y币
                             UIShow.showGoodsYCoinDlgOld(getContext(), otherID, channel_uid);
                         }
                     }
@@ -432,10 +432,10 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             public void onClick(View view) {
                 closeAllInput();
                 boolean isInviteHe = false;
-                if(!ModuleMgr.getCenterMgr().getMyInfo().isMan()) {//女号--邀请他
+                if (!ModuleMgr.getCenterMgr().getMyInfo().isMan()) {//女号--邀请他
                     isInviteHe = true;
                     VideoVerifyBean bean = ModuleMgr.getCommonMgr().getVideoVerify();
-                    if((!bean.getBooleanVideochat() && !bean.getBooleanAudiochat())) {
+                    if ((!bean.getBooleanVideochat() && !bean.getBooleanAudiochat())) {
                         PToast.showShort("请在设置中开启视频、语音通话");
                         return;
                     }
@@ -453,8 +453,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      * 男--看看她 / 女--邀请他
      */
     public void lookAtHer(boolean isOnline) {
-        ImageView imageView =  getChatInstance().chatViewLayout.getInputLookAtHer();
-        if(imageView == null) return;
+        ImageView imageView = getChatInstance().chatViewLayout.getInputLookAtHer();
+        if (imageView == null) return;
 
         if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {//男--看看她
             imageView.setImageResource(R.drawable.f1_look_at_her);
@@ -477,6 +477,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             public void onClick(View view) {
                 closeAllInput();
                 long whisperID = getChatInstance().chatAdapter.getLWhisperId();
+                StatisticsMessage.chatFramePayY(whisperID);
+
                 UserInfoLightweight info = getChatInstance().chatAdapter.getUserInfo(whisperID);
                 UIShow.showGoodsYCoinDlgOld(getContext(), whisperID, info == null ? "" : String.valueOf(info.getChannel_uid()));
                 Statistics.userBehavior(SendPoint.menu_me_y);
@@ -489,12 +491,14 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 closeAllInput();
+                Statistics.userBehavior(SendPoint.page_chatframe_gopayclose, getChatInstance().chatAdapter.getLWhisperId());
+
                 UIShow.showYTipsCloseDlg(getContext(), new CloseBalanceDlg.IsCloseYTips() {
                     @Override
                     public void isCloseYTips() {
                         getChatInstance().chatViewLayout.yTipsLogic(true);
                     }
-                });
+                }, getChatInstance().chatAdapter.getLWhisperId());
             }
         });
     }

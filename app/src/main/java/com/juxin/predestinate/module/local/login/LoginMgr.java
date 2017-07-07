@@ -15,8 +15,6 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.LoginResult;
 import com.juxin.predestinate.bean.start.RegResult;
 import com.juxin.predestinate.bean.start.UP;
-import com.juxin.predestinate.module.local.statistics.SendPoint;
-import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -222,6 +220,8 @@ public class LoginMgr implements ModuleBase {
      * 登录
      */
     public void onLogin(final Activity context, final long uid, final String pwd) {
+        ModuleMgr.getCenterMgr().getMyInfo().setUid(uid);//在未登录的时候设置uid，统计用，登录成功之后会根据返回值重设uid
+
         HashMap<String, Object> userAccount = new HashMap<>();
         userAccount.put("username", uid);
 //        userAccount.put("pwd", EncryptUtil.md5(pwd));

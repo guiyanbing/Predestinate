@@ -782,6 +782,7 @@
     <string name="connect">立即接通</string>
     <string name="call_back">立即回拨</string>
     <string name="chat_join_fail_tips">加入聊天失败，请检查网络后重试</string>
+    <string name="dlg_need_vip">您非VIP会员，不可以直接发起视频和语音通话</string>
 
     <!-- =================软件升级 start================= -->
     <string name="update_server_error">没有检测到新版本信息</string>
@@ -796,12 +797,13 @@
     <string name="cache_state_little">有少量缓存，可以清理</string>
     <string name="cache_state_huge">有大量缓存，建议清除</string>
     <!-- =================缓存数据 end================= -->
-    <string name="dlg_need_vip">您非VIP会员，不可以直接发起视频和语音通话</string>
+
     <!-- =================支付 start================= -->
     <string name="pay_alipay_not_install">支付出错，请检查支付宝是否安装！</string>
     <string name="paying">支付中</string>
     <!-- =================支付 end================= -->
-       <!-- =================封禁弹框================= -->
+
+    <!-- =================封禁弹框================= -->
     <string name="dal_bottom_banned_title">抱歉暂时无法登录</string>
     <string name="dal_bottom_banned_desc">由于您被多人举报，被限制登录</string>
     <string name="dal_bottom_banned_cus_tip">如有疑问，请联系客服:</string>

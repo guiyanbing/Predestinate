@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.juxin.library.utils.TimeBaseUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.settting.ContactBean;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.util.UIShow;
@@ -53,6 +55,7 @@ public class BottomBannedDialog extends BaseDialogFragment {
         findViewById(R.id.iv_bottom_banned_exit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Statistics.userBehavior(SendPoint.page_stopframe_close);
                 getDialog().cancel();
             }
         });
