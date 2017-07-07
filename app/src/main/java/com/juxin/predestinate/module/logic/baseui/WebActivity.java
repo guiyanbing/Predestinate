@@ -50,8 +50,8 @@ public class WebActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (webPanel != null && webPanel.getWebView() != null && webPanel.getWebView().canGoBack()) {
-            webPanel.getWebView().goBack();
+        if (webPanel != null && webPanel.canGoBack()) {
+//            webPanel.getWebView().goBack();
         } else {
             super.onBackPressed();
         }
