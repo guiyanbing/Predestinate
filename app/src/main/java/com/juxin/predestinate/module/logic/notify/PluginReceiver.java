@@ -1,10 +1,13 @@
 package com.juxin.predestinate.module.logic.notify;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.predestinate.bean.my.InviteInfo;
 import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -59,6 +62,13 @@ public class PluginReceiver extends BroadcastReceiver {
             String packageName = intent.getData().getSchemeSpecificPart();
             if (VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO.equals(packageName)) {
                 Statistics.installVideoPlugin(true);
+                if (VideoAudioChatHelper.getInstance().isBeInvite() && VideoAudioChatHelper.getInstance().getmInviteInfo() != null){
+                    InviteInfo info = VideoAudioChatHelper.getInstance().getmInviteInfo();
+                    //跳转视频
+                    VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
+                            info.getVcId(), info.getDstUid(), info.getChatType(), info.getPrice());
+                }
+
             }
         }
     }

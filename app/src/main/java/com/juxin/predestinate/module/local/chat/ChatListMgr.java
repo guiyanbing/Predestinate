@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
@@ -535,7 +536,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 CountDownTimerUtil.getInstance().addHandledIds(VideoAudioChatHelper.getInstance().getInviteId());
                 VideoAudioChatHelper.getInstance().openInvitedDirect((Activity) App.getActivity(),
                         videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp(), videoMessage.getVc_channel_key());
-                PSP.getInstance().put("ISINVITE", false);
                 return;
             }
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -18,6 +19,7 @@ import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
+import com.juxin.predestinate.bean.my.InviteInfo;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -64,6 +66,8 @@ public class VideoAudioChatHelper {
     private boolean isDownloading = false;
     private int singleType;
     private static boolean isGroupInvite = false;  // 用户是否处于群发状态
+    private boolean isBeInvite = false;            //  用户是否处于被邀请状态
+    private InviteInfo mInviteInfo;                //  被邀请信息保存
     private static long inviteId = 0;
 
     private VideoAudioChatHelper() {
@@ -136,6 +140,20 @@ public class VideoAudioChatHelper {
     }
 
     /**
+     * 设置是否处于群发状态
+     */
+    public boolean isBeInvite() {
+        return isBeInvite;
+    }
+
+    /**
+     * 设置是否处于群发状态InviteInfo
+     */
+    public InviteInfo getmInviteInfo() {
+        return mInviteInfo;
+    }
+
+    /**
      * 处于群发要请时获取inviteId
      */
     public long getInviteId() {
@@ -153,6 +171,7 @@ public class VideoAudioChatHelper {
      * @param isInvate   是否来自邀请他按钮，只有女号有。布局和出场方式 singleType 不同
      */
     public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag, int singleType, String channel_uid, boolean isInvate) {
+        PSP.getInstance().put("ISINVITE", false);
         boolean isMan = ModuleMgr.getCenterMgr().getMyInfo().isMan();  // 女号不弹框
         if (isInvate || (isMan && flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0) == 0)) {
             UIShow.showLookAtHerDlg(context, dstUid, channel_uid, isInvate);
@@ -169,6 +188,7 @@ public class VideoAudioChatHelper {
      * @param selectVal 是否露脸
      */
     public void acceptInviteVAChat(final long inviteId, int selectVal) {
+        PSP.getInstance().put("ISINVITE", true);
         this.singleType = selectVal;
         LoadingDialog.show((FragmentActivity) App.activity, "加入中...");
         ModuleMgr.getCommonMgr().reqAcceptVideoChat(inviteId, new RequestComplete() {
@@ -176,11 +196,9 @@ public class VideoAudioChatHelper {
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
                     VideoAudioChatHelper.getInstance().inviteId = inviteId;
-                    PSP.getInstance().put("ISINVITE", true);
                     MsgMgr.getInstance().delay(new Runnable() {
                         @Override
                         public void run() {
-                            PSP.getInstance().put("ISINVITE", false);
                             LoadingDialog.closeLoadingDialog();
                         }
                     }, 20000);
@@ -313,6 +331,8 @@ public class VideoAudioChatHelper {
      * @param chatType 1视频，2音频
      */
     public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType, long price) {
+        isBeInvite = true;
+        mInviteInfo = new InviteInfo(vcId, dstUid, chatType, price);
         singleType = 2;   // 男默认关闭摄像头
         Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
         bundle.putInt("vc_chat_from", 1);
@@ -488,6 +508,8 @@ public class VideoAudioChatHelper {
      */
     private void startRtcInitActivity(Context context, Bundle bundle) {
         if (ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO)) {
+            isBeInvite = false;
+            mInviteInfo = null;
             try {
                 Intent intent = new Intent();
                 intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcInitActivity");
