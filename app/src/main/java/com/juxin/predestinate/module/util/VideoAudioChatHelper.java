@@ -257,6 +257,9 @@ public class VideoAudioChatHelper {
     }
 
     public void girlSingleInvite(final Activity activity, final long dstUid, final int type) {
+        if (!pluginIsDownload()) {
+            return;
+        }
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put("tuid", dstUid);
         postParams.put("vtype", type);
@@ -294,6 +297,9 @@ public class VideoAudioChatHelper {
     }
 
     public void girlGroupInvite(final Activity activity, final int type) {
+        if (!pluginIsDownload()) {
+            return;
+        }
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put("vtype", type);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.girlGroupInviteVa, postParams, new RequestComplete() {
@@ -331,6 +337,9 @@ public class VideoAudioChatHelper {
      * @param chatType 1视频，2音频
      */
     public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType, long price) {
+        if (!pluginIsDownload()) {
+            return;
+        }
         isBeInvite = true;
         mInviteInfo = new InviteInfo(vcId, dstUid, chatType, price);
         singleType = 2;   // 男默认关闭摄像头
