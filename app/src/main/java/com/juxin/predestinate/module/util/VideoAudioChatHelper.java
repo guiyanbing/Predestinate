@@ -337,11 +337,11 @@ public class VideoAudioChatHelper {
      * @param chatType 1视频，2音频
      */
     public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType, long price) {
+        isBeInvite = true;
+        mInviteInfo = new InviteInfo(vcId, dstUid, chatType, price);
         if (!pluginIsDownload()) {
             return;
         }
-        isBeInvite = true;
-        mInviteInfo = new InviteInfo(vcId, dstUid, chatType, price);
         singleType = 2;   // 男默认关闭摄像头
         Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
         bundle.putInt("vc_chat_from", 1);
